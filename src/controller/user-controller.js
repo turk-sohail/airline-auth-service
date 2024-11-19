@@ -33,7 +33,24 @@ const removeUser = async (req, res) => {
   }
 };
 
+const signIn = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const token = await userService.signIn(email, password);
+    return res.status(StatusCodes.OK).json({
+      message: "User signed in successfully",
+      data: token,
+      success: true,
+    });
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
   removeUser,
+  signIn,
 };

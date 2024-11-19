@@ -1,4 +1,5 @@
 const UserRepository = require("../repositories/user-repository");
+const jwtService = require("../utils/jwt-service");
 
 class UserService {
   constructor() {
@@ -13,6 +14,28 @@ class UserService {
   }
   async deleteUser(userId) {
     return await this.userRepository.deleteUser(userId);
+  }
+
+  async signIn(email, password) {
+    try {
+      const user = await this.userRepository.getUserByEmail(email);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      const isValid = await this.userRepository.checkPassword(
+        password,
+        user.password
+      );
+      if (!isValid) {
+        throw new Error("Invalid password");
+      }
+      const payload = { id: user.id, email: user.email };
+      const token = await jwtService.createToken(payload);
+      user.token = token;
+      return token;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

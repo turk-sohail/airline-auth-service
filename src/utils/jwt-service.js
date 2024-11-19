@@ -1,4 +1,5 @@
 const { JWT_SECRET } = require("../config/server-config");
+const jwt = require("jsonwebtoken");
 
 const createToken = (payload) => {
   try {

@@ -12,10 +12,25 @@ class UserRepository {
 
   async createUser(data) {
     try {
+      const { password } = data;
       const user = await User.create(data);
       return user;
     } catch (error) {
       console.log("Error creating user", error);
+      throw error;
+    }
+  }
+
+  async getUserByEmail(email) {
+    try {
+      const user = await User.findOne({
+        where: {
+          email,
+        },
+      });
+      return user;
+    } catch (error) {
+      console.log("Error fetcing  user", error);
       throw error;
     }
   }
