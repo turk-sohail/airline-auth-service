@@ -1,6 +1,15 @@
 const { User } = require("../models");
-
+const bcrypt = require("bcrypt");
 class UserRepository {
+  async checkPassword(string, hash) {
+    try {
+      const isValid = await bcrypt.compare(string, hash);
+      return isValid;
+    } catch (error) {
+      console.log("something went wrong", error);
+    }
+  }
+
   async createUser(data) {
     try {
       const user = await User.create(data);
