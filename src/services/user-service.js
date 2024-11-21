@@ -37,6 +37,20 @@ class UserService {
       throw error;
     }
   }
+
+  async isAuthenticated(token) {
+    try {
+      const payload = await jwtService.verifyToken(token);
+      const user = await this.userRepository.getUser(payload.id);
+
+      if (!user) {
+        throw { error: "Corresponding user not found" };
+      }
+      return user.id;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = UserService;

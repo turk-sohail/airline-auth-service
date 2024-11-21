@@ -1,6 +1,8 @@
 const UserService = require("../services/user-service");
 const { StatusCodes } = require("http-status-codes");
 const userService = new UserService();
+const jwtService = require("../utils/jwt-service");
+
 const createUser = async (req, res) => {
   try {
     const data = req.body;
@@ -49,8 +51,25 @@ const signIn = async (req, res) => {
   }
 };
 
+const isAuthenticated = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const response = await userService.isAuthenticated(token);
+    return res.status(StatusCodes.OK).json({
+      message: "User is authenticated",
+      data: response,
+      success: true,
+      error: {},
+    });
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
+};
 module.exports = {
   createUser,
   removeUser,
   signIn,
+  isAuthenticated,
 };
