@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const { PORT } = require("./src/config/server-config");
 const sequelize = require("sequelize");
 const db = require("./src/models");
+const { User, Role } = require("./src/models");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,9 +16,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api", require("./src/routes"));
 
-const start = () => {
+const start = async () => {
+  const user = await User.findByPk(1);
+  const role = await Role.findByPk(1);
+  user.addRole(role);
+
   app.listen(PORT, () => {
     // db.sequelize.sync({ alter: true });
+    //console.log(user);
     console.log(`Server is running on port  ${PORT}`);
   });
 };

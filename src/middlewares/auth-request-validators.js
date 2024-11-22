@@ -9,6 +9,18 @@ const validateUserAuth = (req, res, next) => {
   next();
 };
 
+const validateAdminRequest = (req, res, next) => {
+  const { id } = req.body;
+  if (!id) {
+    return res.status(400).json({
+      success: false,
+      message: "Id is required",
+    });
+  }
+  next();
+};
+
 module.exports = {
   validateUserAuth,
+  validateAdminRequest,
 };

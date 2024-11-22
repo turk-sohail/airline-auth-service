@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Role } = require("../models");
 const bcrypt = require("bcrypt");
 class UserRepository {
   async checkPassword(string, hash) {
@@ -56,6 +56,21 @@ class UserRepository {
         },
       });
       return user;
+    } catch (error) {
+      console.log("Error getting user", error);
+      throw error;
+    }
+  }
+
+  async isAdmin(userId) {
+    try {
+      const user = await User.findByPk(userId);
+      const adminRole = await Role.findOne({
+        where: {
+          name: "ADMIN",
+        },
+      });
+      return user.hasRole(adminRole);
     } catch (error) {
       console.log("Error getting user", error);
       throw error;

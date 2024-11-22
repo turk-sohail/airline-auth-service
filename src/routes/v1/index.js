@@ -2,6 +2,9 @@ const router = require("express").Router();
 
 const userController = require("../../controller/user-controller");
 const { authValidateMiddleware } = require("../../middlewares");
+const {
+  validateUserAuth,
+} = require("../../middlewares/auth-request-validators");
 
 router.post(
   "/signup",
@@ -15,5 +18,10 @@ router.delete(
 );
 router.post("/signin", userController.signIn);
 router.get("/isAuthenticated", userController.isAuthenticated);
+router.get(
+  "/isAdmin",
+  authValidateMiddleware.validateAdminRequest,
+  userController.isAdmin
+);
 
 module.exports = router;
