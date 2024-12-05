@@ -17,10 +17,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", require("./src/routes"));
 
 const start = async () => {
-  const user = await User.findByPk(1);
-  const role = await Role.findByPk(1);
-  user.addRole(role);
-
   app.listen(PORT, () => {
     // db.sequelize.sync({ alter: true });
     //console.log(user);
